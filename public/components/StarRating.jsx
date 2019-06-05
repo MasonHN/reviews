@@ -5,7 +5,6 @@ const StarRating = (props) => {
   
   const getStarRating = () => {
     let starsTotal = props.starsAwarded; 
-    console.log('here is starsTotal ', starsTotal);
 
     //if the rating is 1
     if(starsTotal < 2) {

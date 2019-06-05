@@ -12,7 +12,11 @@ class App extends React.Component {
     this.state = {
       uuid: 59, //talk to hunter about how this works
       reviews: [], //find a way to get currentUuid's reviews into state
+      pageCount: 0,
+      currentPage: 1
     }
+
+    this.pageSelect = this.pageSelect.bind(this);
   }
 
 /* This lifecycle method should make a get request to the databse to gather data for the current UUID.
@@ -20,7 +24,11 @@ I will also need to find a way to know which UUID is on screen. */
   componentWillMount() {
     axios.get(`http://ec2-54-173-235-60.compute-1.amazonaws.com/api/reviews/${this.state.uuid}`)
     .then((res) => {
-      this.setState({reviews: res.data[0].reviews})
+      let pages = Math.ceil(res.data[0].reviews.length / 10);
+      this.setState({
+        reviews: res.data[0].reviews,
+        pageCount: pages
+      })
     })
     .catch((err) => {
       console.log(err);
@@ -45,11 +53,26 @@ I will also need to find a way to know which UUID is on screen. */
     }
   }
 
+  pageSelect(e) {
+    this.setState({
+      currentPage: e.target.innerHTML
+    })
+  }
+
   render() {
+    const range = [...Array(this.state.pageCount).keys()]
     return (
       <>
-      <Reviews reviewData={this.state.reviews}/>
+        <Reviews page = {this.state.currentPage} reviewData={this.state.reviews}/>
+      <>
+        {range.map((element, index) => {
+          return (
+            <button onClick={this.pageSelect}>{index + 1}</button>
+          )
+        })}
       </>
+      </>
+      
     );
   }
 }

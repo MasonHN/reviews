@@ -16,7 +16,7 @@ const Reviews = (props) => {
         <StarTotals reviewData={props.reviewData}/>
         </div>
         <div className="review-list" >
-        <Review reviewData={props.reviewData}/>
+        <Review page={props.page} reviewData={props.reviewData}/>
         </div>
       </div>
     </>
